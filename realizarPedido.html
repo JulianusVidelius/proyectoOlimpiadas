@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Realizar Pedido</title>
+</head>
+<body>
+    <form action="gestorPedidos.php" method="POST">
+        <label for="productos">Seleccionar productos:</label><br>
+        
+        <div id="productos">
+            <div class="producto">
+                <label for="nombre_producto">Nombre del Producto:</label>
+                <input type="text" name="productos[0][nombre_producto]" required>
+
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" name="productos[0][cantidad]" min="1" value="1" required>
+
+                <label for="precio">Precio:</label>
+                <input type="text" name="productos[0][precio]" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="agregarProducto()">Agregar otro producto</button>
+
+        <button type="submit">Realizar Pedido</button>
+    </form>
+
+    <script>
+        function agregarProducto() {
+            const productosDiv = document.getElementById('productos');
+            const productoCount = productosDiv.children.length;
+            const newProductoDiv = document.createElement('div');
+            newProductoDiv.className = 'producto';
+
+            newProductoDiv.innerHTML = `
+                <label for="nombre_producto">Nombre del Producto:</label>
+                <input type="text" name="productos[${productoCount}][nombre_producto]" required>
+
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" name="productos[${productoCount}][cantidad]" min="1" value="1" required>
+
+                <label for="precio">Precio:</label>
+                <input type="text" name="productos[${productoCount}][precio]" required>
+            `;
+
+            productosDiv.appendChild(newProductoDiv);
+        }
+    </script>
+</body>
+</html>
