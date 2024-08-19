@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilosAdminPanel.css">
+    <title>Panel de Admin</title>
+</head>
+<body>
+    <header>
+        <div class="left">
+            <button onclick="location.href='login_admin.html'">Iniciar Sesión Admin</button>
+        </div>
+        <div class="center">
+            <img src="deportes al aire libre logo.png" height="150px" width="120px" alt="Logo" class="logo">
+        </div>
+    </header>
+
+    <h1>Panel de Administración</h1>
+    <div id="pedidos"></div>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('adminPedidos.php')
+            .then(response => response.json())
+            .then(data => {
+                const pedidosDiv = document.getElementById('pedidos');
+                pedidosDiv.innerHTML = '';
+
+                if (data.error) {
+                    pedidosDiv.innerHTML = '<p>' + data.error + '</p>';
+                    return;
+                }
+
+                data.pedidos.forEach((pedido) => {
+                    const pedidoDiv = document.createElement('div');
+                    pedidoDiv.innerHTML = `
+                        <p>Pedido ${pedido.id}: ${pedido.productos}</p>
+                        <button onclick="eliminarPedido(${pedido.id})">Eliminar</button>
+                        <button onclick="marcarEntregado(${pedido.id})">Marcar como Entregado</button>
+                    `;
+                    pedidosDiv.appendChild(pedidoDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function eliminarPedido(id) {
+            fetch('adminEliminarPedido.php?id=' + id)
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function marcarEntregado(id) {
+    fetch('adminMarcarEntregado.php?id=' + id)
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+        function cerrarSesion() {
+            fetch('cerrarSesion.php')
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                location.href = 'login_admin.html';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

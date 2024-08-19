@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conexion = openConnection();
 
     if ($conexion) {
-        $consulta = "SELECT * FROM login WHERE usuario = ?";
+        $consulta = "SELECT * FROM admin WHERE usuario = ?";
         $stmt = mysqli_prepare($conexion, $consulta);
         mysqli_stmt_bind_param($stmt, "s", $usuario);
 
@@ -18,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $fila = mysqli_fetch_assoc($resultado);
 
             if ($fila && password_verify($contrasena, $fila['contrasena'])) {
-                $_SESSION["user_id"] = $fila['id'];
-                $_SESSION["usuario"] = $fila['usuario'];
-                echo "Inicio de sesión exitoso. <a href='listarProductos.html'>Ir a la tienda</a>";
+                $_SESSION["admin_id"] = $fila['id'];
+                $_SESSION["admin_usuario"] = $fila['usuario'];
+                echo "Inicio de sesión exitoso. <a href='adminPanel.html'>Ir al panel</a>";
             } else {
                 echo "Usuario o contraseña incorrectos.";
             }

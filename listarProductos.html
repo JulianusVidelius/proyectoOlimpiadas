@@ -4,123 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilosCarrito.css">
-    <title>Listar Productos</title>
+    <title>Listado de Productos</title>
 </head>
 <body>
     <header>
-        <h1>Tienda Online</h1>
+        <div class="left">
+            <button onclick="location.href='index.html'">Registrarse</button>
+            <button onclick="location.href='login.html'">Iniciar Sesión</button>
+        </div>
+        <div class="center">
+            <img src="deportes al aire libre logo.png" height="150px" width="120px" alt="Logo" id="logo" class="logo">
+        </div>
+        <div class="right">
+            <img src="carrito.png" alt="Carrito" class="icon" width="85px" height="85px" onclick="verCarrito()">
+        </div>
     </header>
-    
-    <h2>Categorías</h2>
-    <div id="categorias">
-        <button onclick="filtrarProductos('todos')">Todos</button>
-        <button onclick="filtrarProductos('categoria1')">Categoría 1</button>
-        <button onclick="filtrarProductos('categoria2')">Categoría 2</button>
-        <!-- Añade más categorías según sea necesario -->
-    </div>
 
-    <h2>Productos Disponibles</h2>
-    <div id="productos">
-        <!-- Productos de ejemplo, reemplazar con los productos reales -->
-        <div class="producto" data-categoria="categoria1">
-            <h2>Producto 1</h2>
-            <p>Precio: $10.00</p>
-            <button onclick="agregarAlCarrito('Producto 1', 10.00)">Agregar al carrito</button>
+    <h1>Listado de Productos</h1>
+    <div id="productos" class="product-grid">
+        <!-- Aquí se listarían los productos disponibles -->
+        <!-- Simulación de productos -->
+        <div class="product-card">
+            <img src="cesped.jpeg" alt="Producto 1" height="100px" width="100px">
+            <div class="product-info">
+                <h3>Grama Bahiana Cesped En Rollos</h3>
+                <p class="price">$1,350</p>
+                <button onclick="agregarAlCarrito('Grama Bahiana Césped En Rollos', 1350)">Agregar al carrito</button>
+            </div>
         </div>
-        <div class="producto" data-categoria="categoria2">
-            <h2>Producto 2</h2>
-            <p>Precio: $15.00</p>
-            <button onclick="agregarAlCarrito('Producto 2', 15.00)">Agregar al carrito</button>
+        <div class="product-card">
+            <img src="cesped.jpeg" alt="Producto 2" height="100px" width="100px">
+            <div class="product-info">
+                <h3>Cesped Sintetico Premium 30mm x 1m2</h3>
+                <p class="price">$15,399 /m²</p>
+                <button onclick="agregarAlCarrito('Césped Sintético Premium 30mm x 1m2', 15399)">Agregar al carrito</button>
+            </div>
         </div>
-        <!-- Agrega más productos según sea necesario -->
+        <div class="product-card">
+            <img src="cesped.jpeg" alt="Producto 3" height="100px" width="100px">
+            <div class="product-info">
+                <h3>Grama Bahiana En Panes</h3>
+                <p class="price">$1,650</p>
+                <button onclick="agregarAlCarrito('Grama Bahiana En Panes', 1650)">Agregar al carrito</button>
+            </div>
+        </div>
+        <!-- Repite según la cantidad de productos -->
     </div>
 
-    <h2>Carrito de Compras</h2>
-    <div id="carrito">
-        <!-- Los artículos agregados al carrito aparecerán aquí -->
+    <!-- Modal del carrito -->
+    <div id="carritoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarCarrito()">&times;</span>
+            <h2>Tu Carrito</h2>
+            <div id="listaCarrito"></div>
+            <button onclick="finalizarPedido()">Finalizar Pedido</button>
+        </div>
     </div>
 
-    <div id="boton">
-        <button onclick="finalizarCompra()">Finalizar Compra</button>
-    </div>
+    <img src="perfil.png" alt="Perfil" class="perfil-icon" onclick="verPerfil()">
 
     <script>
-        const carrito = [];
+        let carrito = [];
 
         function agregarAlCarrito(nombre, precio) {
-            const itemIndex = carrito.findIndex(item => item.nombre === nombre);
+            carrito.push({ nombre, precio });
+            alert(nombre + " agregado al carrito.");
+        }
 
-            if (itemIndex > -1) {
-                carrito[itemIndex].cantidad += 1;
+        function verCarrito() {
+            const listaCarrito = document.getElementById('listaCarrito');
+            listaCarrito.innerHTML = '';
+
+            if (carrito.length === 0) {
+                listaCarrito.innerHTML = '<p>El carrito está vacío.</p>';
             } else {
-                carrito.push({ nombre, precio, cantidad: 1 });
+                carrito.forEach((item, index) => {
+                    const productoDiv = document.createElement('div');
+                    productoDiv.innerHTML = `
+                        <p>${item.nombre} - $${item.precio.toFixed(2)}</p>
+                        <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
+                    `;
+                    listaCarrito.appendChild(productoDiv);
+                });
             }
 
-            actualizarCarrito();
+            document.getElementById('carritoModal').style.display = 'block';
         }
 
-        function actualizarCarrito() {
-            const carritoDiv = document.getElementById('carrito');
-            carritoDiv.innerHTML = '';
-
-            carrito.forEach((item, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'carrito-item';
-                itemDiv.innerHTML = `
-                    <p>${item.nombre} - $${item.precio} x ${item.cantidad}</p>
-                    <button onclick="removerDelCarrito(${index})">Remover</button>
-                `;
-                carritoDiv.appendChild(itemDiv);
-            });
+        function cerrarCarrito() {
+            document.getElementById('carritoModal').style.display = 'none';
         }
 
-        function removerDelCarrito(index) {
+        function eliminarDelCarrito(index) {
             carrito.splice(index, 1);
-            actualizarCarrito();
+            verCarrito();
         }
 
-        function finalizarCompra() {
-            const form = document.createElement('form');
-            form.action = 'gestorPedidos.php';
-            form.method = 'POST';
+        function finalizarPedido() {
+            if (carrito.length === 0) {
+                alert('Tu carrito está vacío.');
+                return;
+            }
 
-            carrito.forEach((item, index) => {
-                const inputNombre = document.createElement('input');
-                inputNombre.type = 'hidden';
-                inputNombre.name = `productos[${index}][nombre_producto]`;
-                inputNombre.value = item.nombre;
+            const productos = JSON.stringify(carrito);
 
-                const inputCantidad = document.createElement('input');
-                inputCantidad.type = 'hidden';
-                inputCantidad.name = `productos[${index}][cantidad]`;
-                inputCantidad.value = item.cantidad;
-
-                const inputPrecio = document.createElement('input');
-                inputPrecio.type = 'hidden';
-                inputPrecio.name = `productos[${index}][precio]`;
-                inputPrecio.value = item.precio;
-
-                form.appendChild(inputNombre);
-                form.appendChild(inputCantidad);
-                form.appendChild(inputPrecio);
+            fetch('guardarPedido.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'productos=' + encodeURIComponent(productos)
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                carrito = [];
+                cerrarCarrito();
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
-
-            document.body.appendChild(form);
-            form.submit();
         }
 
-        function filtrarProductos(categoria) {
-            const productos = document.querySelectorAll('.producto');
-
-            productos.forEach(producto => {
-                if (categoria === 'todos' || producto.getAttribute('data-categoria') === categoria) {
-                    producto.style.display = 'block';
+        function verPerfil() {
+            fetch('verificarSesion.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.sesionIniciada) {
+                    window.location.href = 'perfilUsuario.html';
                 } else {
-                    producto.style.display = 'none';
+                    alert('No has iniciado sesión. Por favor inicia sesión o regístrate.');
+                    window.location.href = 'login.html';
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         }
     </script>
 </body>
 </html>
-

@@ -1,0 +1,103 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('ejemplo3.avif') no-repeat center center fixed; /* Cambia 'ejemplo.jpeg' por la ruta de tu imagen de fondo */
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+header .left button,
+header .center a {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+header .left button:hover,
+header .center a:hover {
+    background-color: #218838;
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+}
+
+h1 {
+    font-size: 32px;
+    color: #333;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 700;
+}
+
+#infoPerfil {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    text-align: left;
+}
+
+#infoPerfil p {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#infoPerfil button {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#infoPerfil button:hover {
+    background-color: #c82333;
+}
+
+button {
+    background-color: #28a745;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+.center{
+    margin-top: 30px;
+}
+.titulo{
+    background-color: #fff
+}
