@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilosPerfilUsuario.css">
+    <title class="titulo">Perfil de Usuario</title>
+</head>
+<body>
+    <header>
+        <div class="left">
+            <button onclick="location.href='index.html'">Registrarse</button>
+            <button onclick="location.href='login.html'">Iniciar Sesión</button>
+        </div>
+        <div class="center">
+          <a href="listarProductos.html">Volver a Inicio</a>  
+        </div>
+    </header>
+
+    <h1>Perfil de Usuario</h1>
+    <div id="infoPerfil"></div>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('perfilUsuario.php')
+            .then(response => response.json())
+            .then(data => {
+                const infoPerfil = document.getElementById('infoPerfil');
+                infoPerfil.innerHTML = '';
+
+                if (data.error) {
+                    infoPerfil.innerHTML = '<p>' + data.error + '</p>';
+                    return;
+                }
+
+                if (data.pedidos.length === 0) {
+                    infoPerfil.innerHTML = '<p>No hay pedidos en el historial.</p>';
+                } else {
+                    data.pedidos.forEach((pedido, index) => {
+                        const pedidoDiv = document.createElement('div');
+                        pedidoDiv.innerHTML = `
+                            <p>Pedido ${index + 1}: ${pedido.productos}</p>
+                            <button onclick="eliminarPedido(${pedido.id})">Eliminar Pedido</button>
+                        `;
+                        infoPerfil.appendChild(pedidoDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function cerrarSesion() {
+            fetch('cerrarSesion.php')
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                location.href = 'listarProductos.html';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function eliminarPedido(id) {
+            fetch('eliminarPedido.php?id=' + id)
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
